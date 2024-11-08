@@ -1,0 +1,55 @@
+# Datadog Agent with Logs, APM, and Processes
+# with specific configurations to work on OpenShift 4.
+# When installing the chart, install onto a non-default namespace with
+# `helm install --namespace <your_ns>` due to existing SecurityContextConstraints
+# on the default namespace. For more details about setting appropriate security
+# constraints, see https://docs.datadoghq.com/integrations/openshift/ and
+# https://www.datadoghq.com/blog/openshift-monitoring-with-datadog/
+#targetSystem: "linux"
+datadog:
+  apiKey: "*************"
+  appKey: "*************"
+  # If not using secrets, then use apiKey and appKey instead
+  #apiKeyExistingSecret: <DATADOG_API_KEY_SECRET>
+  #appKeyExistingSecret: <DATADOG_APP_KEY_SECRET>
+  clusterName: aks-dapr
+  tags: []
+  # Depending on your DNS/SSL setup, it might not be possible to verify the Kubelet cert properly
+  # If you have proper CA, you can switch it to true
+  kubelet:
+    tlsVerify: false
+  apm:
+    portEnabled: true
+    peer_tags_aggregation: true
+    compute_stats_by_span_kind: true
+    peer_service_aggregation: true
+    instrumentation:
+      enabled: true
+      libVersions:
+         java: "1"
+         dotnet: "3"
+  logs:
+    enabled: true
+    containerCollectAll: true
+  orchestratorExplorer:
+    enabled: true
+  processAgent:
+    enabled: true
+    processCollection: true
+  networkMonitoring:
+    enabled: true
+  otelCollector:
+    enabled: true
+agents:
+  image:
+    repository: datadog/agent-dev
+    tag: nightly-ot-beta-main
+    doNotCheckTag: true
+  containers:
+    agent:
+      env:
+        - name: DD_HOSTNAME
+          value: "aks-dapr"
+providers:
+  aks:
+    enabled: true
