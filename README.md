@@ -5,7 +5,7 @@ helm install dd -f values.yaml --set datadog.otelCollector.enabled=true --set-fi
 
 You will have agent with otel collector
 
-#send traces to the agent tru otel
+# send traces to the agent tru otel
 kubectl -n eshopondapr edit configurations.dapr.io dapr-config
 
 Modify last lines to have the tracing part like this (change the dd-datadog.datadog to servicename.namespace)
