@@ -1,0 +1,16 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: dapr-config
+  namespace: eshopondapr
+spec:
+  metric:
+    enabled: true
+  metrics:
+    enabled: true
+  tracing:
+    otel:
+      endpointAddress: dd-datadog.datadog.svc.cluster.local:4317
+      isSecure: false
+      protocol: grpc
+    samplingRate: "1"
